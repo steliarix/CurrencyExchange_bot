@@ -14,7 +14,31 @@ storage = {}
 last_invocated = {}
 
 
+# Декоратор для кэширования
 
+def cached(ttl_s: int):
+    def cached_decorator(function):
+
+        def cached_function(*args, **kwargs):
+            key = f"{function.__name__}|{str(args)}|{str(kwargs)}"
+
+            now = int(time())
+            if key not in last_invocated or last_invocated[key] + ttl_s <= now:
+                if key not in last_invocated:
+                    last_invocated[key] = now
+                result = function(*args, **kwargs)
+                storage[key] = result
+                print('1', key)
+            else:
+                result = storage[key]
+                last_invocated[key] = now
+                print('2', key)
+
+            return result
+
+        return cached_function
+
+    return cached_decorator
 
 
 # Команда /help для боллее детальной информации о командах
