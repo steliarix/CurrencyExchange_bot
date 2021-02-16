@@ -28,11 +28,9 @@ def cached(ttl_s: int):
                     last_invocated[key] = now
                 result = function(*args, **kwargs)
                 storage[key] = result
-                print('1', key)
             else:
                 result = storage[key]
                 last_invocated[key] = now
-                print('2', key)
 
             return result
 
