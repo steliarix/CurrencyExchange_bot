@@ -1,14 +1,14 @@
 import matplotlib.pyplot as plt
 import datetime as DT
-import config
 import telebot
 import requests
 from exchangeratesapi import Api
 from time import time
 import io
+import os
 
 api = Api()
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
 storage = {}
 last_invocated = {}
@@ -23,7 +23,7 @@ def cached(ttl_s: int):
             key = f"{function.__name__}|{str(args)}|{str(kwargs)}"
 
             now = int(time())
-            if key not in last_invocated or last_invocated[key] + ttl_s <= now:
+            if key not in storage or last_invocated.get(key, 0) + ttl_s <= now:
                 if key not in last_invocated:
                     last_invocated[key] = now
                 result = function(*args, **kwargs)
