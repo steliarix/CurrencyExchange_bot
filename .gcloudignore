@@ -1,0 +1,7 @@
+.idea
+venv
+app.yaml
+.gcloudignore
+__pycache__
+.git
+secrets.yaml
